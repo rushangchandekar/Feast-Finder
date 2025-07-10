@@ -1,13 +1,14 @@
-import { Router } from 'express';
+import { Router, Request, Response, RequestHandler } from 'express';
 import axios from 'axios';
 
 const router = Router();
 
-router.post('/', async (req, res) => {
+const improveRecipeHandler: RequestHandler = async (req: Request, res: Response) => {
   const { recipe, feedback } = req.body;
 
   if (!recipe || !feedback) {
-    return res.status(400).json({ error: 'Missing recipe or feedback' });
+    res.status(400).json({ error: 'Missing recipe or feedback' });
+    return;
   }
 
   const prompt = `Recipe: ${recipe}\nFeedback: ${feedback}\nImprove this recipe based on the feedback.`;
@@ -31,8 +32,13 @@ router.post('/', async (req, res) => {
       console.error('Axios Headers:', err.response?.headers);
     }
 
-    res.status(500).json({ error: 'Gemini API failed', details: err instanceof Error ? err.message : err });
+    res.status(500).json({
+      error: 'Gemini API failed',
+      details: err instanceof Error ? err.message : String(err),
+    });
   }
-});
+};
+
+router.post('/', improveRecipeHandler);
 
 export default router;

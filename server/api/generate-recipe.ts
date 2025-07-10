@@ -1,13 +1,14 @@
-import { Router } from 'express';
+import { Router, Request, Response, RequestHandler } from 'express';
 import axios from 'axios';
 
 const router = Router();
 
-router.post('/', async (req, res) => {
+const generateRecipeHandler: RequestHandler = async (req: Request, res: Response) => {
   const { ingredients } = req.body;
 
   if (!ingredients) {
-    return res.status(400).json({ error: 'No ingredients provided' });
+    res.status(400).json({ error: 'No ingredients provided' });
+    return;
   }
 
   try {
@@ -24,20 +25,25 @@ router.post('/', async (req, res) => {
 
     res.json({
       title: "AI Generated Recipe",
-      ingredients: ingredients.split(',').map((i) => i.trim()),
-      instructions: resultText.split('\n').filter((line) => line.trim() !== ''),
+      ingredients: ingredients.split(',').map((i: string) => i.trim()),
+      instructions: resultText.split('\n').filter((line: string) => line.trim() !== ''),
     });
   } catch (err) {
     console.error('Gemini API error:', err);
 
-  if (axios.isAxiosError(err)) {
-    console.error('Axios Response:', err.response?.data);
-    console.error('Axios Status:', err.response?.status);
-    console.error('Axios Headers:', err.response?.headers);
-  }
+    if (axios.isAxiosError(err)) {
+      console.error('Axios Response:', err.response?.data);
+      console.error('Axios Status:', err.response?.status);
+      console.error('Axios Headers:', err.response?.headers);
+    }
 
-  res.status(500).json({ error: 'Gemini API failed', details: err instanceof Error ? err.message : err });
+    res.status(500).json({
+      error: 'Gemini API failed',
+      details: err instanceof Error ? err.message : String(err),
+    });
   }
-});
+};
+
+router.post('/', generateRecipeHandler);
 
 export default router;
