@@ -1,0 +1,9 @@
+{
+  "/Home": "pages/Home.js",
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/RecipeDetail": "pages/RecipeDetail.js",
+  "/SmartChef": "pages/SmartChef.js",
+  "/layout": "pages/layout.js",
+  "/_document": "pages/_document.js"
+}
