@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "commonjs",
   "scripts": {
-    "dev": "vite dev",
+    "dev": "vite",
     "build": "vite build",
     "start": "vite start",
     "lint": "vite lint",
@@ -63,7 +63,7 @@
     "@types/express": "^5.0.3",
     "@types/node": "^24.0.7",
     "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.2",
+    "@types/react-dom": "^19.1.6",
     "@types/recharts": "^1.8.29",
     "@vitejs/plugin-react": "^4.4.1",
     "autoprefixer": "^10.4.21",

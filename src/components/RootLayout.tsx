@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import './globals.css';
+import "../globals.css";
 import { Toaster } from '../components/ui/toaster';
 import { ThemeProvider } from '../components/theme-provider';
 
