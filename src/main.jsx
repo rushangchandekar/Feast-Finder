@@ -1,17 +1,17 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./main.css";
-import App from "./App";
-import { BrowserRouter } from "react-router-dom";
-import RootLayout from './components/RootLayout';
+// src/main.jsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async'; 
+import App from './App.jsx';
+import "./globals.css";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <RootLayout>
+    <HelmetProvider>
+      <BrowserRouter>
         <App />
-      </RootLayout>
-    </BrowserRouter>
+      </BrowserRouter>
+    </HelmetProvider>
   </React.StrictMode>
 );

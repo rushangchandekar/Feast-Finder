@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import "../globals.css";
-import { Toaster } from '../components/ui/toaster';
-import { ThemeProvider } from '../components/theme-provider';
+import { Toaster } from './ui/toaster';
+import { ThemeProvider } from './theme-provider';
 
 export default function RootLayout({
   children,
