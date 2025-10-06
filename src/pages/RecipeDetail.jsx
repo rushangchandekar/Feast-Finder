@@ -7,7 +7,6 @@ import { AiFillPushpin } from "react-icons/ai"
 import { BsPatchCheck } from "react-icons/bs"
 import RecipeCard from '../components/RecipeCard'
 
-
 const RecipeDetail = () => {
   const [recipe, setRecipe] = useState(null)
   const [recipes, setRecipes] = useState([])
@@ -29,7 +28,6 @@ const RecipeDetail = () => {
 
       setLoading(false)
 
-
     } catch (error) {
       console.log(error)
 
@@ -37,12 +35,10 @@ const RecipeDetail = () => {
     }
   }
 
-useEffect(() => {
-  window.scrollTo({ top: 0, behavior: 'smooth' }); // 👈 Add this
-  getRecipe(id);
-}, [id]);
-
-
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    getRecipe(id);
+  }, [id]);
 
   if (loading) {
     return (
@@ -51,26 +47,27 @@ useEffect(() => {
       </div>
     );
   }
+
   return (
-    <div className='w-full'>
+    <div className='w-full bg-white'>
       <Header title={recipe?.strMeal} image={recipe?.strMealThumb} />
 
       <div className='w-full px-4 lg:px-20 pt-5'>
-        <div className='w-full flex flex-col md:flex-row gap-8 py-20'>
+        <div className='w-full flex flex-col md:flex-row gap-8 py-12'>
           {/* LEFT SIDE - Ingredients & Tags */}
-          <div className='w-full md:w-2/4 md:border-r border-slate-800 pr-4'>
+          <div className='w-full md:w-2/4 md:border-r border-gray-200 pr-4'>
             {/* Ingredients */}
             <div className='flex flex-col gap-5'>
-              <p className='text-green-500 text-2xl underline'>Ingredients</p>
+              <p className='text-green-600 text-2xl font-bold border-b border-green-100 pb-2'>Ingredients</p>
               {
                 Array.from({ length: 20 }, (_, i) => {
                   const ingredient = recipe?.[`strIngredient${i + 1}`];
                   const measure = recipe?.[`strMeasure${i + 1}`];
                   return (
                     ingredient && (
-                      <p key={i} className='text-neutral-100 flex gap-2'>
-                        <AiFillPushpin className='text-green-800 text-xl' />
-                        {measure} {ingredient}
+                      <p key={i} className='text-gray-700 flex items-center gap-2 py-1 border-b border-gray-50'>
+                        <AiFillPushpin className='text-green-600 text-xl flex-shrink-0' />
+                        <span className="font-medium">{measure}</span> {ingredient}
                       </p>
                     )
                   );
@@ -79,32 +76,32 @@ useEffect(() => {
             </div>
 
             {/* Tags */}
-            <div className='flex flex-col gap-3 mt-20'>
-              <p className='text-green-500 text-2xl underline'>Health Labels</p>
-              <div className='flex flex-wrap gap-4'>
+            <div className='flex flex-col gap-3 mt-12'>
+              <p className='text-green-600 text-2xl font-bold border-b border-green-100 pb-2'>Health Labels</p>
+              <div className='flex flex-wrap gap-3 mt-3'>
                 {
                   recipe?.strTags
                     ? recipe.strTags.split(',').map((item, index) => (
                         <p
-                          className='text-white flex gap-2 bg-[#fff5f518] px-4 py-1 rounded-full'
+                          className='text-gray-700 flex items-center gap-2 bg-green-50 px-4 py-1.5 rounded-full border border-green-100'
                           key={index}
                         >
-                          <BsPatchCheck color='green' /> {item.trim()}
+                          <BsPatchCheck className="text-green-600" /> {item.trim()}
                         </p>
                       ))
-                    : <p className='text-neutral-400'>No tags available</p>
+                    : <p className='text-gray-500 italic'>No tags available</p>
                 }
               </div>
             </div>
           </div>
 
           {/* RIGHT SIDE - Video */}
-          <div className='w-full md:w-2/4 flex flex-col items-center justify-center'>
+          <div className='w-full md:w-2/4 flex flex-col'>
             {
               recipe?.strYoutube && (
                 <div className='w-full'>
-                  <p className='text-green-500 text-2xl underline mb-3'>Tutorial</p>
-                  <div className='w-full aspect-video rounded-lg overflow-hidden'>
+                  <p className='text-green-600 text-2xl font-bold border-b border-green-100 pb-2 mb-4'>Tutorial</p>
+                  <div className='w-full aspect-video rounded-lg overflow-hidden shadow-lg'>
                     <iframe
                       className="w-full h-full"
                       src={`https://www.youtube.com/embed/${recipe.strYoutube.split('=')[1]}`}
@@ -117,12 +114,25 @@ useEffect(() => {
                 </div>
               )
             }
+
+            {/* Instructions (Added) */}
+            {recipe?.strInstructions && (
+              <div className='mt-8'>
+                <p className='text-green-600 text-2xl font-bold border-b border-green-100 pb-2 mb-4'>Instructions</p>
+                <div className='text-gray-700 leading-relaxed space-y-4'>
+                  {recipe.strInstructions.split('\r\n').filter(Boolean).map((instruction, index) => (
+                    <p key={index} className='flex gap-2'>
+                      <span className='font-bold text-green-600'>{index + 1}.</span> {instruction}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
-
 }
 
 export default RecipeDetail
