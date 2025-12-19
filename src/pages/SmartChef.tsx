@@ -34,7 +34,7 @@ const ingredientFormSchema = z.object({
 type IngredientFormValues = z.infer<typeof ingredientFormSchema>;
 
 // Define API URL
-const API_URL = 'http://localhost:3001';
+const API_URL = 'http://localhost:8000';
 
 export default function FridgeFeastPage() {
   const [generatedRecipe, setGeneratedRecipe] = useState<Recipe | null>(null);
@@ -105,7 +105,7 @@ const handleGenerateRecipe: SubmitHandler<IngredientFormValues> = async (data) =
         (e.message.includes("Failed to fetch") || e.message.includes("Network Error"));
       
       const errorMessage = isConnectionError
-        ? "Cannot connect to recipe server. Please ensure it's running on port 3001."
+        ? "Cannot connect to recipe server. Please ensure it's running on port 8000."
         : e instanceof Error ? e.message : "An unknown error occurred.";
       
       setError(errorMessage);
