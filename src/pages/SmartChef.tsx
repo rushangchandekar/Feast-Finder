@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -34,9 +34,7 @@ const ingredientFormSchema = z.object({
 type IngredientFormValues = z.infer<typeof ingredientFormSchema>;
 
 // Define API URL
-// Define API URL
-const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-const API_URL = isLocal ? "http://localhost:8000" : "";
+const API_URL = window.location.hostname === "localhost" ? "http://localhost:8000" : "";
 
 export default function FridgeFeastPage() {
   const [generatedRecipe, setGeneratedRecipe] = useState<Recipe | null>(null);
@@ -52,6 +50,7 @@ export default function FridgeFeastPage() {
     defaultValues: { ingredients: "" },
   });
 
+  // Replace this function starting at line 49:
   const handleGenerateRecipe: SubmitHandler<IngredientFormValues> = async (data) => {
     setIsLoading(true);
     setError(null);
