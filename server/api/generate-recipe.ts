@@ -4,6 +4,10 @@ import axios from 'axios';
 const router = Router();
 
 const generateRecipeHandler: RequestHandler = async (req: Request, res: Response) => {
+  if (!req.body) {
+    res.status(400).json({ error: 'Request body is missing' });
+    return;
+  }
   const { ingredients } = req.body;
 
   if (!ingredients) {
@@ -11,15 +15,14 @@ const generateRecipeHandler: RequestHandler = async (req: Request, res: Response
     return;
   }
 
-  try {
-    const prompt = `Generate a recipe using these ingredients: ${ingredients}`;
+    try {
+      const prompt = `Generate a recipe using these ingredients: ${ingredients}`;
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`;
+      console.log(`Hitting Gemini API...`);
 
-    const response = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-      {
+      const response = await axios.post(url, {
         contents: [{ parts: [{ text: prompt }] }],
-      }
-    );
+      });
 
     const resultText = response.data.candidates[0].content.parts[0].text;
 
