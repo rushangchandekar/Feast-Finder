@@ -10,7 +10,7 @@ load_dotenv()
 
 app = FastAPI()
 
-# CORS - Allow all origins for Vercel deployment
+# CORS - allow all for deployment flexibility
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -35,52 +35,44 @@ class ImproveRequest(BaseModel):
     recipe: str
     feedback: str
 
+# Health check at both root and /api paths for robustness
 @app.get("/api/health")
+@app.get("/health")
 def health_check():
     return {"status": "healthy"}
 
+# Routes defined with and without /api prefix
 @app.post("/api/generate-recipe")
+@app.post("/generate-recipe")
 async def generate_recipe(request: RecipeRequest):
     try:
         print(f"\n📝 Ingredients: {request.ingredients}")
-        
         prompt = f"Generate a recipe using these ingredients: {request.ingredients}. Return the response in JSON format with 'title', 'ingredients' (as a list), and 'instructions' (as a list)."
-        
         response = model.generate_content(prompt)
         text = response.text
-        
-        # Try to parse JSON from response if model returns it as string
         try:
-            # Remove markdown code blocks if present
             if "```json" in text:
                 text = text.split("```json")[1].split("```")[0].strip()
             elif "```" in text:
                 text = text.split("```")[1].split("```")[0].strip()
-            
-            recipe_data = json.loads(text)
-            return recipe_data
+            return json.loads(text)
         except:
-            # Fallback if JSON parsing fails
             return {
                 "title": "AI Generated Recipe",
                 "ingredients": request.ingredients.split(','),
                 "instructions": text.split('\n')
             }
-            
     except Exception as e:
-        print(f"❌ Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/improve-recipes")
+@app.post("/improve-recipes")
 async def improve_recipe(request: ImproveRequest):
     try:
         prompt = f"Recipe: {request.recipe}\nFeedback: {request.feedback}\nImprove this recipe based on the feedback. Return the improved recipe as text."
-        
         response = model.generate_content(prompt)
         return {"improvedRecipe": response.text}
-            
     except Exception as e:
-        print(f"❌ Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":

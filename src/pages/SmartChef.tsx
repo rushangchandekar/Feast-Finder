@@ -34,7 +34,7 @@ const ingredientFormSchema = z.object({
 type IngredientFormValues = z.infer<typeof ingredientFormSchema>;
 
 // Define API URL
-const API_URL = window.location.hostname === "localhost" ? "http://localhost:8000" : "";
+const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:8000' : '';
 
 export default function FridgeFeastPage() {
   const [generatedRecipe, setGeneratedRecipe] = useState<Recipe | null>(null);
