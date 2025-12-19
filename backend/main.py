@@ -33,7 +33,7 @@ if not GEMINI_API_KEY:
     print("Warning: GEMINI_API_KEY not found in environment")
 else:
     genai.configure(api_key=GEMINI_API_KEY)
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-2.5-flash")
     print("Gemini AI initialized")
 
 class RecipeRequest(BaseModel):
