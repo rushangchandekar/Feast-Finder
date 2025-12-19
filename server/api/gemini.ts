@@ -1,15 +1,7 @@
-// Change from:
 import { Router } from 'express';
 import axios from 'axios';
-// ...
 
-// To:
-const express = require('express');
-const axios = require('axios');
-const Router = express.Router;
-// ...
-
-// Change export default to module.exports at the end
+const router = Router();
 
 router.post('/', async (req, res) => {
   const { prompt } = req.body;

@@ -1,24 +1,14 @@
-// Change from:
-import express, { Application } from 'express';
+import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import geminiRouter from './api/gemini';
-// ...
-
-// To:
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const geminiRouter = require('./api/gemini');
-// ...
+import geminiRouter from './api/gemini.js';
+import generateRecipeRouter from './api/generate-recipe.js';
+import improveRecipesRouter from './api/improve-recipes.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = 3001;
-
-// Rest of the file remains similar
-// Change export default to module.exports at the end
 
 app.use(cors());
 app.use(express.json());
