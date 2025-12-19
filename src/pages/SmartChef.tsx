@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -34,7 +34,9 @@ const ingredientFormSchema = z.object({
 type IngredientFormValues = z.infer<typeof ingredientFormSchema>;
 
 // Define API URL
-const API_URL = 'http://localhost:8000';
+// Define API URL
+const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+const API_URL = isLocal ? "http://localhost:8000" : "";
 
 export default function FridgeFeastPage() {
   const [generatedRecipe, setGeneratedRecipe] = useState<Recipe | null>(null);
@@ -50,13 +52,12 @@ export default function FridgeFeastPage() {
     defaultValues: { ingredients: "" },
   });
 
-  // Replace this function starting at line 49:
-const handleGenerateRecipe: SubmitHandler<IngredientFormValues> = async (data) => {
+  const handleGenerateRecipe: SubmitHandler<IngredientFormValues> = async (data) => {
     setIsLoading(true);
     setError(null);
     setGeneratedRecipe(null);
     setShowSaved(false);
-    
+
     try {
       // Generate recipe - removed server test check
       const res = await fetch(`${API_URL}/api/generate-recipe`, {
@@ -64,34 +65,34 @@ const handleGenerateRecipe: SubmitHandler<IngredientFormValues> = async (data) =
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ingredients: data.ingredients }),
       });
-      
+
       // Enhanced error handling
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
         console.error("API Error Response:", errorData);
-        
-        const errorMessage = errorData.error || errorData.details || 
+
+        const errorMessage = errorData.error || errorData.details ||
           `Server responded with status ${res.status}: ${res.statusText}`;
-        
+
         throw new Error(errorMessage);
       }
-      
+
       const recipeOutput = await res.json();
-      
+
       // Validate the response format
       if (!recipeOutput || typeof recipeOutput !== 'object') {
         console.error("Invalid response format:", recipeOutput);
         throw new Error("Invalid response format from server. Expected recipe data.");
       }
-      
+
       if (!recipeOutput.title || !Array.isArray(recipeOutput.ingredients) || !Array.isArray(recipeOutput.instructions)) {
         console.error("Missing required recipe fields:", recipeOutput);
         throw new Error("The recipe data is incomplete. Please try again.");
       }
-      
+
       // Success
       setGeneratedRecipe(recipeOutput);
-      
+
       // Show success toast
       toast({
         title: "Recipe Generated!",
@@ -99,15 +100,15 @@ const handleGenerateRecipe: SubmitHandler<IngredientFormValues> = async (data) =
       });
     } catch (e) {
       console.error("Full error object:", e);
-      
+
       // Add connection error detection
-      const isConnectionError = e instanceof Error && 
+      const isConnectionError = e instanceof Error &&
         (e.message.includes("Failed to fetch") || e.message.includes("Network Error"));
-      
+
       const errorMessage = isConnectionError
         ? "Cannot connect to recipe server. Please ensure it's running on port 8000."
         : e instanceof Error ? e.message : "An unknown error occurred.";
-      
+
       setError(errorMessage);
       toast({
         variant: "destructive",
@@ -121,7 +122,7 @@ const handleGenerateRecipe: SubmitHandler<IngredientFormValues> = async (data) =
 
   const handleFeedback = async (feedbackType: 'like' | 'dislike') => {
     if (!generatedRecipe) return;
-    
+
     setFeedbackLoading(feedbackType);
 
     const recipeString = `Title: ${generatedRecipe.title}
@@ -137,19 +138,19 @@ Instructions: ${generatedRecipe.instructions.join('; ')}`;
           feedback: feedbackType,
         }),
       });
-      
+
       // Enhanced error handling
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
         console.error("Feedback API Error:", errorData);
         throw new Error(errorData.error || errorData.details || `Error: ${res.status}`);
       }
-      
+
       toast({
         title: "Feedback Sent",
         description: `Thank you for your ${feedbackType === 'like' ? 'positive' : 'constructive'} feedback! This helps improve future suggestions.`,
       });
-      
+
       // Auto-save liked recipes
       if (feedbackType === 'like' && !savedRecipes.some(r => r.title === generatedRecipe.title)) {
         setSavedRecipes([...savedRecipes, generatedRecipe]);
@@ -189,12 +190,12 @@ Instructions: ${generatedRecipe.instructions.join('; ')}`;
       description: `"${generatedRecipe.title}" has been added to your collection.`,
     });
   };
-  
+
   const toggleSavedRecipes = () => {
     setShowSaved(!showSaved);
     setGeneratedRecipe(null);
   };
-  
+
   const viewSavedRecipe = (recipe: Recipe) => {
     setGeneratedRecipe(recipe);
     setShowSaved(false);
@@ -210,11 +211,11 @@ Instructions: ${generatedRecipe.instructions.join('; ')}`;
         <p className="text-muted-foreground mt-2 text-sm sm:text-base">
           Generate delicious recipes from what's in your fridge!
         </p>
-        
+
         {savedRecipes.length > 0 && (
           <div className="mt-4">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={toggleSavedRecipes}
               className="gap-2 text-sm"
             >
@@ -260,9 +261,9 @@ Instructions: ${generatedRecipe.instructions.join('; ')}`;
                     />
                   </CardContent>
                   <CardFooter>
-                    <Button 
-                      type="submit" 
-                      className="w-full sm:w-auto transition-all duration-200 hover:scale-[1.02]" 
+                    <Button
+                      type="submit"
+                      className="w-full sm:w-auto transition-all duration-200 hover:scale-[1.02]"
                       disabled={isLoading}
                     >
                       {isLoading ? (
@@ -332,9 +333,9 @@ Instructions: ${generatedRecipe.instructions.join('; ')}`;
                 </CardContent>
                 <CardFooter className="flex flex-col sm:flex-row justify-between items-center gap-4">
                   <div className="flex space-x-2">
-                    <Button 
-                      variant="outline" 
-                      onClick={() => handleFeedback('like')} 
+                    <Button
+                      variant="outline"
+                      onClick={() => handleFeedback('like')}
                       aria-label="Like this recipe"
                       disabled={feedbackLoading !== null}
                     >
@@ -345,9 +346,9 @@ Instructions: ${generatedRecipe.instructions.join('; ')}`;
                       )}
                       Like
                     </Button>
-                    <Button 
-                      variant="outline" 
-                      onClick={() => handleFeedback('dislike')} 
+                    <Button
+                      variant="outline"
+                      onClick={() => handleFeedback('dislike')}
                       aria-label="Dislike this recipe"
                       disabled={feedbackLoading !== null}
                     >
@@ -359,8 +360,8 @@ Instructions: ${generatedRecipe.instructions.join('; ')}`;
                       Dislike
                     </Button>
                   </div>
-                  <Button 
-                    onClick={handleSaveRecipe} 
+                  <Button
+                    onClick={handleSaveRecipe}
                     aria-label="Save this recipe"
                     disabled={savedRecipes.some(r => r.title === generatedRecipe?.title)}
                   >
@@ -389,7 +390,7 @@ Instructions: ${generatedRecipe.instructions.join('; ')}`;
               ) : (
                 <div className="space-y-4">
                   {savedRecipes.map((recipe, index) => (
-                    <div 
+                    <div
                       key={index}
                       className="p-4 border rounded-md hover:bg-accent/5 transition-colors cursor-pointer flex justify-between items-center"
                       onClick={() => viewSavedRecipe(recipe)}
@@ -407,8 +408,8 @@ Instructions: ${generatedRecipe.instructions.join('; ')}`;
               )}
             </CardContent>
             <CardFooter>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => setShowSaved(false)}
                 className="w-full"
               >
