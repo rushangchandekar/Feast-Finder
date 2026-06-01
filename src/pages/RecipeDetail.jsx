@@ -49,24 +49,24 @@ const RecipeDetail = () => {
   }
 
   return (
-    <div className='w-full bg-white'>
+    <div className='w-full bg-white dark:bg-[hsl(220,20%,8%)] text-gray-900 dark:text-gray-100 transition-colors duration-300'>
       <Header title={recipe?.strMeal} image={recipe?.strMealThumb} />
 
       <div className='w-full px-4 lg:px-20 pt-5'>
         <div className='w-full flex flex-col md:flex-row gap-8 py-12'>
           {/* LEFT SIDE - Ingredients & Tags */}
-          <div className='w-full md:w-2/4 md:border-r border-gray-200 pr-4'>
+          <div className='w-full md:w-2/4 md:border-r border-gray-200 dark:border-white/10 pr-4'>
             {/* Ingredients */}
             <div className='flex flex-col gap-5'>
-              <p className='text-green-600 text-2xl font-bold border-b border-green-100 pb-2'>Ingredients</p>
+              <p className='text-emerald-600 dark:text-emerald-400 text-2xl font-bold border-b border-emerald-100 dark:border-emerald-500/20 pb-2'>Ingredients</p>
               {
                 Array.from({ length: 20 }, (_, i) => {
                   const ingredient = recipe?.[`strIngredient${i + 1}`];
                   const measure = recipe?.[`strMeasure${i + 1}`];
                   return (
                     ingredient && (
-                      <p key={i} className='text-gray-700 flex items-center gap-2 py-1 border-b border-gray-50'>
-                        <AiFillPushpin className='text-green-600 text-xl flex-shrink-0' />
+                      <p key={i} className='text-gray-700 dark:text-gray-300 flex items-center gap-2 py-1 border-b border-gray-50 dark:border-white/5'>
+                        <AiFillPushpin className='text-emerald-600 dark:text-emerald-400 text-xl flex-shrink-0' />
                         <span className="font-medium">{measure}</span> {ingredient}
                       </p>
                     )
@@ -77,19 +77,19 @@ const RecipeDetail = () => {
 
             {/* Tags */}
             <div className='flex flex-col gap-3 mt-12'>
-              <p className='text-green-600 text-2xl font-bold border-b border-green-100 pb-2'>Health Labels</p>
+              <p className='text-emerald-600 dark:text-emerald-400 text-2xl font-bold border-b border-emerald-100 dark:border-emerald-500/20 pb-2'>Health Labels</p>
               <div className='flex flex-wrap gap-3 mt-3'>
                 {
                   recipe?.strTags
                     ? recipe.strTags.split(',').map((item, index) => (
                         <p
-                          className='text-gray-700 flex items-center gap-2 bg-green-50 px-4 py-1.5 rounded-full border border-green-100'
+                          className='text-gray-700 dark:text-gray-300 flex items-center gap-2 bg-emerald-50 dark:bg-emerald-500/10 px-4 py-1.5 rounded-full border border-emerald-100 dark:border-emerald-500/20'
                           key={index}
                         >
-                          <BsPatchCheck className="text-green-600" /> {item.trim()}
+                          <BsPatchCheck className="text-emerald-600 dark:text-emerald-400" /> {item.trim()}
                         </p>
                       ))
-                    : <p className='text-gray-500 italic'>No tags available</p>
+                    : <p className='text-gray-500 dark:text-gray-400 italic'>No tags available</p>
                 }
               </div>
             </div>
@@ -100,7 +100,7 @@ const RecipeDetail = () => {
             {
               recipe?.strYoutube && (
                 <div className='w-full'>
-                  <p className='text-green-600 text-2xl font-bold border-b border-green-100 pb-2 mb-4'>Tutorial</p>
+                  <p className='text-emerald-600 dark:text-emerald-400 text-2xl font-bold border-b border-emerald-100 dark:border-emerald-500/20 pb-2 mb-4'>Tutorial</p>
                   <div className='w-full aspect-video rounded-lg overflow-hidden shadow-lg'>
                     <iframe
                       className="w-full h-full"
@@ -118,11 +118,11 @@ const RecipeDetail = () => {
             {/* Instructions (Added) */}
             {recipe?.strInstructions && (
               <div className='mt-8'>
-                <p className='text-green-600 text-2xl font-bold border-b border-green-100 pb-2 mb-4'>Instructions</p>
-                <div className='text-gray-700 leading-relaxed space-y-4'>
+                <p className='text-emerald-600 dark:text-emerald-400 text-2xl font-bold border-b border-emerald-100 dark:border-emerald-500/20 pb-2 mb-4'>Instructions</p>
+                <div className='text-gray-700 dark:text-gray-300 leading-relaxed space-y-4'>
                   {recipe.strInstructions.split('\r\n').filter(Boolean).map((instruction, index) => (
                     <p key={index} className='flex gap-2'>
-                      <span className='font-bold text-green-600'>{index + 1}.</span> {instruction}
+                      <span className='font-bold text-emerald-600 dark:text-emerald-400'>{index + 1}.</span> {instruction}
                     </p>
                   ))}
                 </div>
