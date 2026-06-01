@@ -11,6 +11,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const { theme, setTheme } = useTheme();
+  const isNavbarSolid = scrolled || location.pathname === '/smartchef';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,7 +53,7 @@ const Navbar = () => {
   return (
     <header
       className={`w-full fixed top-0 z-50 transition-all duration-500 ${
-        scrolled
+        isNavbarSolid
           ? 'bg-white/80 dark:bg-[hsl(220,20%,6%)]/85 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-black/20'
           : 'bg-transparent'
       }`}
@@ -63,10 +64,12 @@ const Navbar = () => {
           <img
             src={Logo}
             alt="FeastFinder Logo"
-            className="h-8 lg:h-10 w-auto transition-transform duration-300 group-hover:scale-105"
+            className={`h-8 lg:h-10 w-auto transition-transform duration-300 group-hover:scale-105 ${
+              isNavbarSolid ? 'filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] dark:drop-shadow-none' : ''
+            }`}
           />
         </Link>
-
+ 
         {/* Desktop Menu */}
         <ul className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
@@ -76,10 +79,10 @@ const Navbar = () => {
                   href={link.href}
                   className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                     link.isSpecial
-                      ? `${scrolled ? 'text-emerald-600 dark:text-emerald-400' : 'text-emerald-300'} hover:bg-emerald-500/10`
+                      ? `${isNavbarSolid ? 'text-emerald-600 dark:text-emerald-400' : 'text-emerald-300'} hover:bg-emerald-500/10`
                       : isActive(link.href)
-                        ? `${scrolled ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-white/10' : 'text-white bg-white/15'}`
-                        : `${scrolled ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' : 'text-white/80 hover:text-white'} hover:bg-white/10`
+                        ? `${isNavbarSolid ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-white/10' : 'text-white bg-white/15'}`
+                        : `${isNavbarSolid ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' : 'text-white/80 hover:text-white'} hover:bg-white/10`
                   }`}
                 >
                   {link.label}
@@ -89,10 +92,10 @@ const Navbar = () => {
                   to={link.href}
                   className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                     link.isSpecial
-                      ? `${scrolled ? 'text-emerald-600 dark:text-emerald-400' : 'text-emerald-300'} hover:bg-emerald-500/10`
+                      ? `${isNavbarSolid ? 'text-emerald-600 dark:text-emerald-400' : 'text-emerald-300'} hover:bg-emerald-500/10`
                       : isActive(link.href)
-                        ? `${scrolled ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-white/10' : 'text-white bg-white/15'}`
-                        : `${scrolled ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' : 'text-white/80 hover:text-white'} hover:bg-white/10`
+                        ? `${isNavbarSolid ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-white/10' : 'text-white bg-white/15'}`
+                        : `${isNavbarSolid ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' : 'text-white/80 hover:text-white'} hover:bg-white/10`
                   }`}
                 >
                   {link.label}
@@ -101,14 +104,14 @@ const Navbar = () => {
             </li>
           ))}
         </ul>
-
+ 
         {/* Right side: Theme toggle + CTA */}
         <div className="hidden md:flex items-center gap-3">
           {/* Theme toggle */}
           <button
             onClick={cycleTheme}
             className={`p-2 rounded-full transition-all duration-300 ${
-              scrolled
+              isNavbarSolid
                 ? 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10'
                 : 'text-white/80 hover:text-white hover:bg-white/10'
             }`}
@@ -116,11 +119,11 @@ const Navbar = () => {
           >
             {themeIcon()}
           </button>
-
+ 
           {/* Sign In button */}
           <button
             className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
-              scrolled
+              isNavbarSolid
                 ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md hover:shadow-lg hover:shadow-emerald-500/25 hover:scale-105'
                 : 'border border-white/30 text-white hover:bg-white/15 backdrop-blur-sm'
             }`}
@@ -128,13 +131,13 @@ const Navbar = () => {
             Sign In
           </button>
         </div>
-
+ 
         {/* Mobile right side */}
         <div className="flex md:hidden items-center gap-2">
           <button
             onClick={cycleTheme}
             className={`p-2 rounded-full transition-all duration-300 ${
-              scrolled
+              isNavbarSolid
                 ? 'text-gray-600 dark:text-gray-300'
                 : 'text-white/80'
             }`}
@@ -144,7 +147,7 @@ const Navbar = () => {
           </button>
           <button
             className={`p-2 rounded-full transition-all duration-300 ${
-              scrolled
+              isNavbarSolid
                 ? 'text-gray-900 dark:text-white'
                 : 'text-white'
             }`}
