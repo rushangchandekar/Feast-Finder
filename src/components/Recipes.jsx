@@ -82,34 +82,38 @@ const Recipes = () => {
     }
   }, []);
 
-  if (loading && recipes.length === 0) return <Loading />;
+  if (loading && recipes.length === 0) return (
+    <div className="py-20 flex justify-center">
+      <Loading />
+    </div>
+  );
 
   return (
-    <section className="w-full py-12 bg-gradient-to-b from-white to-gray-50">
-      <div className="w-full px-6 sm:px-8 md:px-12 lg:px-16">
-        {/* Enhanced heading */}
-        <div className="mb-8 text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center justify-center mb-3">
-            <span className="h-px w-8 bg-green-500 mr-3"></span>
-            <span className="text-green-600 font-medium uppercase tracking-wider text-sm">Delicious Options</span>
-            <span className="h-px w-8 bg-green-500 ml-3"></span>
+    <section className="w-full py-16 md:py-24">
+      <div className="w-full">
+        {/* Section heading */}
+        <div className="mb-10 text-center max-w-3xl mx-auto">
+          <div className="inline-flex items-center justify-center mb-4">
+            <span className="h-px w-8 bg-gradient-to-r from-transparent to-emerald-500 dark:to-emerald-400" />
+            <span className="mx-3 text-emerald-600 dark:text-emerald-400 font-semibold uppercase tracking-widest text-sm">Delicious Options</span>
+            <span className="h-px w-8 bg-gradient-to-l from-transparent to-emerald-500 dark:to-emerald-400" />
           </div>
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">
-            Find Your Perfect Recipe
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
+            Find Your Perfect <span className="gradient-text">Recipe</span>
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-base md:text-lg">
             Discover dishes made from ingredients you already have at home
           </p>
         </div>
           
         {/* Search form */}
-        <form className="w-full max-w-xl mx-auto mb-10" onSubmit={handleSearchedRecipe}>
+        <form className="w-full max-w-xl mx-auto mb-12" onSubmit={handleSearchedRecipe}>
           <Searchbar
-            placeholder="eg. Cake, Vegan, Chicken"
+            placeholder="Search recipes... e.g. Cake, Vegan, Chicken"
             handleInputChange={handleChange}
             rightIcon={
               <BiSearchAlt2
-                className="text-gray-600 cursor-pointer hover:text-green-600 transition-colors"
+                className="text-gray-400 dark:text-gray-500 cursor-pointer hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors"
                 onClick={handleSearchedRecipe}
                 size={22}
               />
@@ -125,32 +129,33 @@ const Recipes = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {recipes.map((item, index) => (
                 <div key={index} className="flex justify-center">
-                  <div className="w-[280px] h-[300px]">
+                  <div className="w-full max-w-[320px]">
                     <RecipeCard recipe={item} />
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Show More button or Loading component */}
-            <div className="flex w-full items-center justify-center mt-12">
+            {/* Show More button */}
+            <div className="flex w-full items-center justify-center mt-14">
               {loadingMore ? (
                 <Loading />
               ) : (
-                <Button
-                  title="Show More Recipes"
-                  containerStyle="group bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white px-5 py-2.5 rounded-full font-medium shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-2"
-                  handleClick={showMore}
-                  rightIcon={<FaArrowDown className="group-hover:translate-y-1 transition-transform duration-300" />}
-                />
+                <button
+                  onClick={showMore}
+                  className="group inline-flex items-center gap-3 px-7 py-3 bg-white dark:bg-white/[0.05] border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-200 font-semibold rounded-full hover:border-emerald-300 dark:hover:border-emerald-500/30 hover:text-emerald-600 dark:hover:text-emerald-400 hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-300"
+                >
+                  <span>Show More Recipes</span>
+                  <FaArrowDown className="w-3 h-3 group-hover:translate-y-1 transition-transform duration-300" />
+                </button>
               )}
             </div>
           </>
         ) : (
           <div className="w-full flex items-center justify-center py-10">
-            <div className="bg-white rounded-lg shadow-md p-8 max-w-md text-center">
-              <p className="text-gray-600 text-lg">No recipes found matching your search.</p>
-              <p className="text-gray-500 mt-2">Try a different keyword or ingredient.</p>
+            <div className="bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-100 dark:border-white/[0.06] p-10 max-w-md text-center shadow-sm">
+              <p className="text-gray-600 dark:text-gray-300 text-lg font-medium">No recipes found matching your search.</p>
+              <p className="text-gray-400 dark:text-gray-500 mt-2">Try a different keyword or ingredient.</p>
             </div>
           </div>
         )}

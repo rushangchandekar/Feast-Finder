@@ -1,4 +1,4 @@
-# Logs
+# Logs and build artifacts
 logs
 *.log
 npm-debug.log*
@@ -6,16 +6,37 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
-node_modules
 dist
 dist-ssr
-*.local
+*.tsbuildinfo
+.orchids/
 
-# Editor directories and files
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Local env files (MUST NEVER BE COMMITTED)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*
+
+# Python caching and virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+ENV/
+env/
+
+# Editor and OS files
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
