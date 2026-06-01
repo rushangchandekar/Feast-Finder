@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Logo from '../images/logo.png';
 import { HiMenuAlt3 } from 'react-icons/hi';
 import { AiOutlineClose } from 'react-icons/ai';
 import { FiSun, FiMoon, FiMonitor } from 'react-icons/fi';
@@ -60,11 +59,6 @@ const Navbar = () => {
       <nav className="flex w-full py-3 md:py-4 px-5 md:px-12 lg:px-20 items-center justify-between max-w-[1440px] mx-auto">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
-          <img
-            src={Logo}
-            alt="FeastFinder Logo"
-            className="h-8 lg:h-10 w-auto transition-transform duration-300 group-hover:scale-105"
-          />
           <span className={`text-lg lg:text-xl font-bold transition-colors duration-300 ${
             scrolled 
               ? 'text-gray-900 dark:text-white' 
