@@ -5,7 +5,6 @@ import Loading from './Loading';
 import Searchbar from './SearchBar';
 import RecipeCard from './RecipeCard';
 import { fetchRecipes } from "../lib";
-import Button from './Button';
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
